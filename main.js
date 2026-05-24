@@ -44,6 +44,11 @@ function initNav() {
   const nav = document.querySelector(".nav");
   const menuBtn = document.getElementById("menuBtn");
   const mobileNav = document.getElementById("mobileNav");
+  const mobileClose = document.getElementById("mobileCloseBtn");
+  const mobileDropdownToggle = document.querySelector(
+    ".nav__mobile-dropdown-toggle",
+  );
+  const mobileDropdown = document.querySelector(".nav__mobile-dropdown");
 
   // Scroll effect
   window.addEventListener(
@@ -62,6 +67,33 @@ function initNav() {
       menuBtn.innerHTML = isOpen
         ? `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>`
         : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>`;
+      if (!isOpen && mobileDropdown) {
+        mobileDropdown.classList.remove("open");
+        mobileDropdownToggle?.setAttribute("aria-expanded", "false");
+        mobileDropdownToggle?.classList.remove("open");
+      }
+    });
+  }
+
+  if (mobileClose) {
+    mobileClose.addEventListener("click", () => {
+      mobileNav.classList.remove("open");
+      if (mobileDropdown) {
+        mobileDropdown.classList.remove("open");
+        mobileDropdownToggle?.setAttribute("aria-expanded", "false");
+        mobileDropdownToggle?.classList.remove("open");
+      }
+      if (menuBtn) {
+        menuBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>`;
+      }
+    });
+  }
+
+  if (mobileDropdownToggle && mobileDropdown) {
+    mobileDropdownToggle.addEventListener("click", () => {
+      const isOpen = mobileDropdown.classList.toggle("open");
+      mobileDropdownToggle.setAttribute("aria-expanded", String(isOpen));
+      mobileDropdownToggle.classList.toggle("open", isOpen);
     });
   }
 
@@ -73,6 +105,14 @@ function initNav() {
       router.navigate(page);
       if (mobileNav) {
         mobileNav.classList.remove("open");
+      }
+      if (mobileDropdown) {
+        mobileDropdown.classList.remove("open");
+        mobileDropdownToggle?.setAttribute("aria-expanded", "false");
+        mobileDropdownToggle?.classList.remove("open");
+      }
+      if (menuBtn) {
+        menuBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>`;
       }
     });
   });
